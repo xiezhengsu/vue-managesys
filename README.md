@@ -1,14 +1,7 @@
-# [vue-scscmsV2.0 <sup>webpack V4版</sup>](https://github.com/scscms/vue-scscms)
+# [vue-managesys <sup>webpack V4版</sup>](https://github.com/scscms/vue-scscms)
 
-[![](https://img.shields.io/badge/Powered%20by-vue--scscms-brightgreen.svg)](https://github.com/scscms/vue-scscms)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/scscms/vue-scscms/blob/master/LICENSE)
-[![npm](https://img.shields.io/badge/npm-6.4.1-yellowgreen.svg)](https://github.com/scscms/vue-scscms)
-[![node](https://img.shields.io/badge/node-8.11.0-yellow.svg)](https://github.com/scscms/vue-scscms)
-[![koa](https://img.shields.io/badge/koa-2.5.0-orange.svg)](https://github.com/scscms/vue-scscms)
-[![vue](https://img.shields.io/badge/vue-2.5.17-red.svg)](https://github.com/scscms/vue-scscms)
-[![Element](https://img.shields.io/badge/Element-3.0.1-blue.svg)](https://github.com/scscms/vue-scscms)
 
-基于koa2+mysql+vue2.0+Element+ESlint阳光内容管理系统
+基于koa2+mysql+vue2.0+Element+ESlint文件内容管理系统
 
     简单文章系统模板，含注册、登录、权限管理、用户管理范例。旨在提供一个完整的前后台node+vue2.0开发的脚手架，由您按需扩展。
 
@@ -150,31 +143,7 @@ npm run server
 ```
 
 ### 后台API接口说明
--  1、login: 用户登录（访问权限：游客）
--  2、register: 用户注册（访问权限：游客）
--  3、listArticle: 文章列表（访问权限：自定义）
--  4、listSort: 分类列表（访问权限：自定义）
--  5、saveUpFile: 保存上传记录
--  6、listUpFile: 上传文件列表（访问权限：自定义）
--  7、delFile: 删除上传文件（访问权限：自定义）
--  8、retrieve: 找回密码（访问权限：游客）
--  9、findPassword: 激活找回密码（访问权限：游客）
-- 10、active: 帐号激活（访问权限：游客）
-- 11、changePassword: 修改密码（访问权限：所有用户）
-- 12、updateArticle: 更新文章（访问权限：自定义）
-- 13、passedArticle: 审核文章（访问权限：自定义）
-- 14、deleteArticle: 删除文章（访问权限：自定义）
-- 15、getArticleById: 通过ID获取文章详情（访问权限：游客）
-- 16、updateSort: 更新分类（访问权限：自定义）
-- 17、deleteSort: 删除分类（访问权限：自定义）
-- 18、batchDelSort: 批量删除分类（访问权限：自定义）
-- 19、listUser: 用户列表（访问权限：自定义）
-- 20、passedUser: 审核用户（访问权限：自定义）
-- 21、deleteUser: 删除用户（访问权限：自定义）
-- 22、getUserById: 通过ID获取用户信息（访问权限：同updateUser）
-- 23、upUserPic: 用户上传头像（访问权限：所有用户）
-- 24、updateUser: 更新用户（访问权限：自定义）
-- 25、upFile: 上传过程（访问权限：自定义，代码在server/routes.js里）
+
 
 ### 后记
 
@@ -184,4 +153,3 @@ npm run server
 
 时间匆忙难免错漏，肯请指正。并欢迎交流学习，并献上您的宝贵意思。
 
-QQ群：25702761  邮箱：guangda1234@126.com

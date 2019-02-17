@@ -1,4 +1,4 @@
-# [vue-managesys <sup>webpack V4版</sup>](https://github.com/scscms/vue-scscms)
+# [vue-managesys <sup>webpack V4版</sup>](https://github.com/xiezhengsu/vue-managesys)
 
 
 基于koa2+mysql+vue2.0+Element+ESlint文件内容管理系统
@@ -23,7 +23,7 @@ user：`vip会员`   password：`vip123`
 ### 安装
 
 ```
-git clone https://github.com/scscms/vue-scscms.git
+git clone https://github.com/xiezhengsu/vue-managesys.git
 
 //先git克隆或者下载下来，进入项目目录执行npm命令
 

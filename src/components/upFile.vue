@@ -13,11 +13,15 @@ export default {
       type: Object,
       required: true,
       validator: (obj) => {
-        obj.accept = obj.accept || 'image/gif, image/jpeg, image/jpg, image/png'
+        obj.accept = obj.accept || 'image/gif, image/jpeg, image/jpg, image/png, application/vnd.ms-excel'
         obj.disabled = obj.disabled || false
         return Object.prototype.toString.call(obj) === '[object Object]'
       }
-    }
+    },
+		roster_id:{
+			type: Number,
+			required: true,
+		}
   },
   data () {
     return this.upload
@@ -29,11 +33,13 @@ export default {
       let formData = new window.FormData()
       let file = files[0]
       formData.append('file', file)
+			formData.append("roster_id",this.roster_id)
       if (!common.upFile_accept.test(file.type)) {
         this.$message('非法上传文件格式！')
       } else if (file.size > common.upFile_maxSize) {
         this.$message('上传文件大小超出！')
       } else {
+				let rosterid=1
         utils.ajax.call(this, '/upFile', formData, (data, err) => {
           if (!err) {
             this.$emit('successUpload', data)

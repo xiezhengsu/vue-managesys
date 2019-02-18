@@ -29,7 +29,7 @@
 			<el-row>
 				<el-col>
 					<!-- <el-input v-model="''"></el-input> -->
-					<up-file ref="upload" :upload="{}" @successUpload="successUpload" @progress="onProgress"></up-file>
+					<up-file ref="upload" :upload="{}" :roster_id="search_data.roster_id" @successUpload="successUpload" @progress="onProgress"></up-file>
 					<el-button type="primary" @click="uploadExcel" style="margin-left:10px" :disabled="grade.upFile">{{upText}}</el-button>
 					<el-button type="warning" @click="exportExcel" style="margin-left:10px">导出文件</el-button>
 				</el-col>
@@ -258,7 +258,8 @@ export default {
 		},
 		successUpload (data) {
 			if (data.status) {
-				this.$message.warning(`文件导入成功`)
+				this.$message.success(`文件导入成功`)
+				this.ajaxData()
 			}else{
 				this.$message.warning(`文件导入失败`)
 			}

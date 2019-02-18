@@ -76,7 +76,10 @@ const storage = multer.diskStorage({
 })
 
 // 上传文件
+//multer有single()中的名称必须是表单上传字段的name名称。
 routes.post('/upFile', multer({ storage }).single('file'), async ctx => {
+	// routes.post('/upFile', multer({ storage }).array('file'), async ctx => {
+		console.log(ctx.req.body.roster_id)
   const { originalname, mimetype, filename, path, size } = ctx.req.file
   let msg
   let isDel = 0

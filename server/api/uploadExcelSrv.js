@@ -5,7 +5,7 @@ const path = require('path');
 const downPath = path.resolve(__dirname, '../../dist');
 async function getExcelObjs (ctx) {
 	const { filename, path } = ctx.req.file
-	
+	const roster_id = ctx.req.body.roster_id
 	const file = ctx.req.file; // 获取上传文件
 	const reader = fs.createReadStream(file.path); // 创建可读流
 	const ext = file.filename.split('.').pop(); // 获取上传文件扩展名
@@ -23,8 +23,7 @@ async function getExcelObjs (ctx) {
 			datas.push(data);
 		}
 		const user = ctx.state.userInfo
-		const roster_id = ctx.state.roster_id=1
-		const [result] = await this.saveExcel({arr:datas,userinfo:user,roster_id:roster_id})
+		const [result] = await this.saveExcel({arr:datas,userinfo:user,roster_id})
 		return {
 			status: true,
 			data:result

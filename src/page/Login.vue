@@ -222,7 +222,7 @@ export default {
             if (!err) {
               utils.storage.set('userInfo', data, () => {
                 let url = this.$route.query.url
-                url = url && !url.includes('login') ? url : '/article/list'
+                url = url && !url.includes('login') ? url : '/roster/list'
                 this.$router.replace(url)
               })
             }

@@ -30,50 +30,50 @@ export default {
       meta: { title: '登录' },
       component: Login
     }, {
-      path: '/article',
-      meta: {
-        verify: true,
-        title: '文章管理',
-        icon: 'fa fa-file-text-o'
-      },
-      component: Home,
-      redirect: '/article/list',
-      children: [{
-        path: 'sort',
-        meta: {
-          verify: true,
-          grade: common.page_grade.listSort,
-          title: '分类管理',
-          icon: 'fa fa-th-large'
-        },
-        component: ArticleSort
-      }, {
-        path: 'list',
-        meta: {
-          verify: true,
-          grade: common.page_grade.listArticle,
-          title: '文章列表',
-          icon: 'fa fa-newspaper-o'
-        },
-        component: ArticleList
-      }, {
-        path: 'add',
-        meta: {
-          verify: true,
-          title: '添加文章',
-          icon: 'fa fa-clone'
-        },
-        component: ArticleAdd
-      }, {
-        path: 'edit/:id',
-        meta: {
-          verify: true,
-          title: '编辑文章',
-          icon: 'fa fa-clone'
-        },
-        component: ArticleAdd
-      }]
-    }, {
+//       path: '/article',
+//       meta: {
+//         verify: true,
+//         title: '文章管理',
+//         icon: 'fa fa-file-text-o'
+//       },
+//       component: Home,
+//       redirect: '/article/list',
+//       children: [{
+//         path: 'sort',
+//         meta: {
+//           verify: true,
+//           grade: common.page_grade.listSort,
+//           title: '分类管理',
+//           icon: 'fa fa-th-large'
+//         },
+//         component: ArticleSort
+//       }, {
+//         path: 'list',
+//         meta: {
+//           verify: true,
+//           grade: common.page_grade.listArticle,
+//           title: '文章列表',
+//           icon: 'fa fa-newspaper-o'
+//         },
+//         component: ArticleList
+//       }, {
+//         path: 'add',
+//         meta: {
+//           verify: true,
+//           title: '添加文章',
+//           icon: 'fa fa-clone'
+//         },
+//         component: ArticleAdd
+//       }, {
+//         path: 'edit/:id',
+//         meta: {
+//           verify: true,
+//           title: '编辑文章',
+//           icon: 'fa fa-clone'
+//         },
+//         component: ArticleAdd
+//       }]
+//     }, {
 		  path: '/roster',
 		  meta: {
 		    verify: true,
@@ -160,25 +160,6 @@ export default {
           icon: 'fa fa-user-times'
         },
         component: userAdd
-      }]
-    }, {
-      path: '/upfile',
-      meta: {
-        verify: true,
-        title: '上传管理',
-        icon: 'fa fa-upload'
-      },
-      component: Home,
-      redirect: '/upfile/list',
-      children: [{
-        path: 'list',
-        meta: {
-          verify: true,
-          grade: common.page_grade.listUpFile,
-          title: '上传列表',
-          icon: 'fa fa-files-o'
-        },
-        component: UpFileList
       }]
     }, {
 		  path: '/logs',

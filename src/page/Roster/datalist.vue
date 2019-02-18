@@ -6,7 +6,7 @@
           <el-input v-model="search_data.username"></el-input>
         </el-form-item>
         <el-form-item label="所属名册">
-					<el-select v-model="search_data.roster_id">
+					<el-select v-model="search_data.roster_id" @change="handleSelect">
 					  <el-option label="全部" value=""></el-option>
 					  <el-option v-for="(item,key) in sort_data" :key="key"
 					             :label="item.roster_name" :value="item.id" v-if="key!=='0'">
@@ -91,7 +91,8 @@
 import utils from '@/utils/index'
 import common from '@/../server/common'
 import '@/components/index'
-
+import XLSX from 'xlsx'
+import download from '../../exportExcel.js'
 export default {
   name: 'list',
   data () {
@@ -196,6 +197,9 @@ export default {
 		beforeRemove(file, fileList) {
 			return this.$confirm(`确定移除 ${ file.name }？`);
 		},
+		handleSelect(id){
+			utils.storage.set('roster_id', id)
+		},
 		uploadExcel () {
 			if(!this.search_data.roster_id){
 				this.$message.warning(`请选择所属名册`);
@@ -211,6 +215,12 @@ export default {
 			utils.ajax.call(this, '/listRosterData', {tag:1,roster_id:this.search_data.roster_id}, (obj, err) => {
 			  if (!err) {
 					this.exportData = obj.data
+					let list=[]
+					
+					if(this.exportData.length==0){
+						this.$message.warning(`该名册下暂无数据,试试导入吧`);
+						return false
+					}
 					const strObj={
 						"合同编号": "contract_no",
 						"姓名": "username",
@@ -233,47 +243,22 @@ export default {
 						"其他1": "content_1",
 						"其他2": "content_2"
 					}
-					let str  = `<tr><td>${Object.keys(strObj).join('</td><td>')}</td></tr>`
-// 					var listO = Object.keys(strObj)
-// 					let str  = `<tr>`
-// 					
-// 					for(let i=0;i<listO.length;i++){
-// 						str+=`<td>${listO[i] + '\t'}</td>`
-// 					}
-// 					str+='</tr>'
-					for(let i = 0 ; i < this.exportData.length ; i++ ){
-						str+='<tr>';
-						for(let item in this.exportData[i]){
-								//增加\t为了不让表格显示科学计数法或者其他格式
-								str+=`<td>${ this.exportData[i][item] + '\t'}</td>`;     
-						}
-						str+='</tr>'
+				
+					let arr=[]
+					arr.push(Object.keys(strObj))
+					for(var i=0;i<this.exportData.length;i++){
+						arr.push(Object.values(this.exportData[i]))
 					}
-					//Worksheet名
-					var worksheet = 'Sheet1'
-					var uri = 'data:application/vnd.ms-excel;base64,';
-		 
-					//下载的表格模板数据
-					var template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" 
-							xmlns:x="urn:schemas-microsoft-com:office:excel" 
-							xmlns="http://www.w3.org/TR/REC-html40">
-							<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-								<x:Name>${worksheet}</x:Name>
-								<x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>
-								</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-								</head><body><table>${str}</table></body></html>`;
-					//下载模板
-					window.location.href = uri + this.base64(template)
+					// 导出excel
+					download.exportExcel(arr,'花名册.xlsx')
+					// 记录操作日志
+					utils.ajax.call(this,'/logsAdd',{opt_content:'excel导出，名册id为：'+this.search_data.roster_id+'，操作人：'+this.opt_user},(obj,err)=>{})
 				}
 			})
 		},
-		base64 (s) { return window.btoa(unescape(encodeURIComponent(s))) },
 		successUpload (data) {
 			if (data.status) {
-				utils.ajax.call(this, '/saveExcel', {arr:JSON.stringify(data.datas),opt_user:this.opt_user,roster_id:this.search_data.roster_id}, (obj, err) => {
-				  this.loading = false
-					!err && this.ajaxData()
-				})
+				this.$message.warning(`文件导入成功`)
 			}else{
 				this.$message.warning(`文件导入失败`)
 			}

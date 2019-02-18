@@ -2,12 +2,11 @@
   <div>
     <el-row class="grid-table">
       <el-form :inline="true" :model='search_data'>
-        <el-form-item label="标题">
-          <el-input v-model="search_data.title"></el-input>
+        <el-form-item label="名册名称">
+          <el-input v-model="search_data.roster_name"></el-input>
         </el-form-item>
-        <el-form-item label="分类">
-          <el-cascader change-on-select :options="sort_data" :clearable="true" v-model="sort_id"
-                       :props="defaultProps"></el-cascader>
+        <el-form-item label="项目名称">
+          <el-input v-model="search_data.roster_pro_name"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button icon="search" type="primary" @click='onSearch'>查询</el-button>
@@ -38,29 +37,6 @@
         :total="table_data.total">
       </el-pagination>
     </el-row>
-    <Sidebar ref="view">
-      <div slot='title'>{{article.title}}</div>
-      <div slot="content" class="sidebar_content" v-loading="loading">
-        <el-row :gutter="20" class="">
-          <el-col :span="6"><strong>文章分类：</strong>{{article.sort_name}}</el-col>
-          <el-col :span="6"><strong>作者：</strong>{{article.user_name}}</el-col>
-          <el-col :span="6"><strong>阅读权限：</strong>{{read_type[article.read_type]}}</el-col>
-          <el-col :span="6"><strong>时间：</strong>{{article.create_time}}</el-col>
-        </el-row>
-        <el-row :gutter="20" class="">
-          <el-col :span="24"><strong>文章概要：</strong>{{article.description}}</el-col>
-        </el-row>
-        <div class="article_content" v-html="article.content">文章内容</div>
-      </div>
-      <div slot="foot" class="sidebar_foot">
-        <p>上一条：<span v-if="!article.next.title">已经没有上一条数据</span>
-          <a @click="getActiveContent(article.next.id)" href="javascript:void 0">{{article.next.title}}</a>
-        </p>
-        <p>下一条：<span v-if="!article.prev.title">已经没有下一条数据</span>
-          <a @click="getActiveContent(article.prev.id)" href="javascript:void 0">{{article.prev.title}}</a>
-        </p>
-      </div>
-    </Sidebar>
   </div>
 </template>
 <script type="text/javascript">

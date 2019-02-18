@@ -3,9 +3,10 @@ module.exports = saveExcel
 
 // 保存上传记录
 async function saveExcel (ctx) {
-	
-	let {opt_user, roster_id, arr} = ctx.request.body
-	arr = JSON.parse(arr)
+	let {userinfo, roster_id, arr} = ctx
+	// arr = JSON.parse(arr)
+	const opt_user = userinfo.user_name
+	const opt_ip = userinfo.login_ip
 	const strObj={
 		"合同编号": "contract_no",
 		"姓名": "username",
@@ -51,31 +52,31 @@ async function saveExcel (ctx) {
 	let resultlist=[]
 	let keys = Object.keys(list[0])
 	for(var i=0;i<list.length;i++){
-	  // console.log(JSON.stringify(list[i]))
+	  
 	  const [result] = await connection.execute(`INSERT INTO members_group (${keys.join(',')}) VALUES (${keys.map(() => '?').join(',')})`, Object.values(list[i]))
 	  resultlist.push(result)	  
 	}
 	const ids = resultlist.map(v=>v.insertId)
-	const user = ctx.state.userInfo
 	const opt_logs_data = {
-	  opt_user: opt_user,
+	  opt_user,
 	  opt_content: `excel导入,生成id集合为:`+JSON.stringify(ids)+`,操作人：`+opt_user+`,关联名册ID:`+roster_id,
 	  opt_time:P.getStrTime(),
-	  opt_ip:user.login_ip
+	  opt_ip
 	}
 	// 添加日志
 	await connection.execute(`INSERT INTO logs (${Object.keys(opt_logs_data).join(',')}) VALUES (${Object.keys(opt_logs_data).map(() => '?').join(',')})`, Object.values(opt_logs_data))
-	
-	if(resultlist.length){
-		ctx.body = {
-		  success: true,
-		  data: resultlist
-		}
-	}else{
-		ctx.body = {
-		  success: false,
-		  message: '文件导入失败'
-		}
-	}
 	await connection.end()
+	return resultlist
+// 	if(resultlist.length){
+// 		ctx.body = {
+// 		  success: true,
+// 		  data: resultlist
+// 		}
+// 	}else{
+// 		ctx.body = {
+// 		  success: false,
+// 		  message: '文件导入失败'
+// 		}
+// 	}
+	
 }

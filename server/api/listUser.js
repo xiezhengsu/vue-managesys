@@ -38,7 +38,12 @@ async function listUser (ctx) {
   ctx.body = {
     success: true,
     data: {
-      page, total, data: list
+      page, total, 
+			data: list.map(v=>{
+				return Object.assign({},v,{
+					create_time:P.getStrTime(v.create_time)
+				})
+			})
     }
   }
 }

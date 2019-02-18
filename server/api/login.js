@@ -18,7 +18,7 @@ async function login (ctx) {
     if (rows.length) {
       const userInfo = rows[0]
 			console.log(data.pass_word, userInfo.pass_word, '-----------bool----')
-      if (data.pass_word== userInfo.pass_word) {
+      if (P.bcrypt.compareSync(data.pass_word, userInfo.pass_word)) {
         if (userInfo.user_type === 0) {
           msg = '此帐号正在审核中！'
         } else {

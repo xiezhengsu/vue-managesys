@@ -11,13 +11,13 @@ export default {
   email_txt: '请输入正确邮箱地址',
   pic_reg: /^(https?:\/\/|\/upFile\/)/i,
   pic_txt: '头像地址不正确！',
-  upFile_maxSize: 1024 * 1024 * 50, // 上传文件大小限制
+  upFile_maxSize: 1024 * 1024 * 50, // 上传文件大小限制50m
   upFile_accept: /^application\//, // 上传文件格式限制
   user_type: {
     0: '未审核用户',
     1: '超级管理员',
-    2: '普通管理员',
-    3: 'VIP用户',
+    2: '高级管理员',
+    3: '普通管理员',
     4: '普通用户'
   },
   // 页面权限设置 0:所有人 4:所有登录用户 3:vip用户以上 2:管理员级别 1:只有超级管理员

@@ -55,12 +55,12 @@ async function updateRosterMember (ctx) {
         const [result] = await connection.execute(`INSERT INTO members_group (${arr.join(',')}) VALUES (${arr.map(() => '?').join(',')})`, Object.values(obj))
         msg = result.affectedRows === 1 ? '操作成功' : '操作失败',
 		
-		// 添加日志
-		opt_logs_data.opt_time = obj.create_time
-		opt_logs_data.opt_ip = opt_logs_data.opt_ip
-		arr_log = arr = Object.keys(obj_logs)
-		opt_logs_data.opt_content += '  结果：'+msg
-		await connection.execute(`INSERT INTO logs (${arr_log.join(',')}) VALUES (${arr_log.map(() => '?').join(',')})`, Object.values(obj_logs))
+				// 添加日志
+				opt_logs_data.opt_time = obj.create_time
+				opt_logs_data.opt_ip = opt_logs_data.opt_ip
+				arr_log = arr = Object.keys(obj_logs)
+				opt_logs_data.opt_content += '  结果：'+msg
+				await connection.execute(`INSERT INTO logs (${arr_log.join(',')}) VALUES (${arr_log.map(() => '?').join(',')})`, Object.values(obj_logs))
       }
     }
     await connection.end()

@@ -9,7 +9,7 @@ async function listRoster (ctx) {
   const arr = []
   let querying = P.getLogsQuery(data,arr)
   const connection = await P.mysql.createConnection(P.config.mysqlDB)
-  const [rows] = await connection.execute('SELECT SQL_NO_CACHE COUNT(*) as total FROM `rosters`' + querying.replace('and', 'where'), arr)
+  const [rows] = await connection.execute('SELECT SQL_NO_CACHE COUNT(*) as total FROM `logs`' + querying.replace('and', 'where'), arr)
   const total = rows[0].total// 总数量
   const pages = Math.ceil(total / pageSize)
   if (page > pages) {
@@ -17,13 +17,17 @@ async function listRoster (ctx) {
   }
   querying += ' order by id desc LIMIT ?, ?'
   arr.push((page - 1) * pageSize, pageSize)
-	const [list] = await connection.execute('select * from `rosters`' + querying.replace('and', 'where'), arr)
+	const [list] = await connection.execute('select * from `logs`' + querying.replace('and', 'where'), arr)
   await connection.end()
   ctx.body = {
     success: true,
     message: '',
     data: {
-      page, total, data: list
+      page, total, 
+			data: list.map(v=>{
+				const opt_time = P.getStrTime(v.opt_time)
+				return Object.assign({},v,{opt_time})
+			})
     }
   }
 }

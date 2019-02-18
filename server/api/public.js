@@ -94,9 +94,13 @@ function getMembersGroupQuery(data, arr) {
 }
 function getLogsQuery(data, arr) {
 	let querying = ''
-	if (data.opt_name) {
-	  querying += ' and opt_name like ?'
-	  arr.push('%' + data.opt_name + '%')
+	if (data.opt_user) {
+	  querying += ' and opt_user like ?'
+	  arr.push('%' + data.opt_user + '%')
+	}
+	if (data.opt_content) {
+	  querying += ' and opt_content like ?'
+	  arr.push('%' + data.opt_content + '%')
 	}
 // 	if (/^[1-4]$/.test(data.read_type)) {
 // 	  querying += ' and read_type=?'
@@ -123,5 +127,6 @@ module.exports = {
   getArticleQuery,
 	getRosterQuery,
 	getMembersGroupQuery,
+	getLogsQuery,
 	getStrTime
 }

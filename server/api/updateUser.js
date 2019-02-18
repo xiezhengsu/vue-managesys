@@ -26,6 +26,9 @@ async function updateUser (ctx) {
     }
     obj[key] = data[key]
   })
+	obj.login_ip = user.login_ip
+	obj.create_time = P.getStrTime()
+	obj.update_time = P.getStrTime()
   obj.pass_word = P.bcrypt.hashSync(data.pass_word, P.bcrypt.genSaltSync(10))// 加密密码
   if (!P.common.name_reg.test(data.user_name)) {
     msg = P.common.name_txt
@@ -42,6 +45,7 @@ async function updateUser (ctx) {
     if (id) {
       delete obj.user_name  // 修改时不能修改帐号
       delete obj.user_email // 修改时不能修改邮箱
+      delete obj.create_time // 修改时不能修改创建时间
       if (user.user_type > 1 || data.pass_word === P.common.defaultPassword) {
         delete obj.pass_word // 不修改原密码情况
       }
@@ -50,7 +54,7 @@ async function updateUser (ctx) {
       const [result] = await connection.execute(`UPDATE user SET ${Object.keys(obj).map(k => k + '=?').join(',')} where id=?`, arr)
       msg = result.affectedRows === 1 ? '' : '修改用户失败'
     } else {
-      obj.create_time = new Date().toLocaleString('zh-cn', { timeZone: 'UTC' }).replace(/[^\d-:/]+/g,' ')
+      // obj.create_time = new Date().toLocaleString('zh-cn', { timeZone: 'UTC' }).replace(/[^\d-:/]+/g,' ')
       // 先检查是否占用帐号
       const [rows] = await connection.execute('SELECT user_name,user_email FROM `user` where `user_name`=? or `user_email`=?', [data.user_name, data.user_email])
       if (rows.length > 0) {

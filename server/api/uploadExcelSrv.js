@@ -3,7 +3,6 @@ const xlsx = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const downPath = path.resolve(__dirname, '../../dist');
- 
 async function getExcelObjs (ctx) {
 	const { filename, path } = ctx.req.file
 	
@@ -18,15 +17,17 @@ async function getExcelObjs (ctx) {
 	if (!getRes) { //没有问题
 		const workbook = xlsx.readFile(filePath);
 		const sheetNames = workbook.SheetNames; // 返回 ['sheet1', ...]
-		console.log(sheetNames)
 		for (const sheetName of sheetNames) {
 			const worksheet = workbook.Sheets[sheetName];
 			const data = xlsx.utils.sheet_to_json(worksheet);
 			datas.push(data);
 		}
+		const user = ctx.state.userInfo
+		const roster_id = ctx.state.roster_id=1
+		const [result] = await this.saveExcel({arr:datas,userinfo:user,roster_id:roster_id})
 		return {
 			status: true,
-			datas
+			data:result
 		};
 	} else {
 		return {

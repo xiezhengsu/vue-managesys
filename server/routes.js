@@ -41,6 +41,7 @@ const urls = {
 	'updateRosterMember': {},
 	'uploadExcelSrv':{},
 	'saveExcel':{},
+	// 'exportFile':{},
 	'logsAdd': {},
 	'logslist': {userType:1} // 日志信息列表
 }

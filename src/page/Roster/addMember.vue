@@ -47,9 +47,10 @@
 	  </el-form-item>
 	  <el-form-item label="(厂方)离职日期" prop="factory_quit_time">
 		<el-date-picker
-		  v-model="data.factory_quit_time"
 		  value-format="yyyy-MM-dd"
 		  type="date"
+			v-model="data.factory_quit_time"
+			@change="changeFormatTime"
 		  placeholder="选择(厂方)离职日期">
 		  </el-date-picker>
 	  </el-form-item>
@@ -102,9 +103,12 @@
 	  <el-form-item label="操作人">
 	    <el-input readonly="readonly" :value="data.opt_user" style="width:217px;opacity: 0.5"></el-input>
 	  </el-form-item>
+		<!-- <el-form-item label="登录ip">
+		  <el-input readonly="readonly" :value="data.opt_ip" style="width:217px;opacity: 0.5"></el-input>
+		</el-form-item> -->
       <el-form-item style="text-align: left">
         <el-button @click="backList">返回列表</el-button>
-        <el-button type="primary" :disabled="grade.updateArticle||loading" @click="saveRosterMember">保存</el-button>
+        <el-button type="primary" :disabled="grade.updateRosterMember||loading" @click="saveRosterMember">保存</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -113,40 +117,15 @@
 import utils from '@/utils/index'
 import common from '@/../server/common'
 import '@/components/index'
-import { quillEditor } from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 
 export default {
   name: 'list',
   data () {
     return {
       upProgress: 0,
-      editorOption: {
-        modules: {
-          placeholder: 'xxx',
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'font': [] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'align': [] }],
-            ['clean'],
-            ['link', 'image', 'video']
-          ]
-        }
-      },
       page_grade: common.page_grade,
       grade: {
-        updateArticle: !0,
+        updateRosterMember: !0,
         upFile: !0
       },
       userInfo: {},
@@ -192,12 +171,13 @@ export default {
         data_in: '',
         opt_user: '',
         content_1: '',
-        content_2: ''
+        content_2: '',
+				opt_ip:''
       },
       rules: {
         sort_id: { required: true, message: '所属名册不能为空' },
-		quit_work_type: {required: true, message: '离职类型不能为空'},
-		contract_no: {required: true, message: '合同编号不能为空'},
+				quit_work_type: {required: true, message: '离职类型不能为空'},
+				contract_no: {required: true, message: '合同编号不能为空'},
         telephone: [{
           required: true, message: '标题不能为空', trigger: 'change'
         }, {
@@ -229,10 +209,18 @@ export default {
     }
   },
   methods: {
+		changeFormatTime(time){
+			this.data.factory_quit_time = time
+		},
     onProgress(p) {
       this.upProgress = p
     },
     saveRosterMember () {
+			console.log(JSON.stringify(this.data))
+			let id = this.$route.params.id
+			if(!id){
+				this.data.id=0
+			}
       this.$refs.form.validate(v => {
         if (v) {
           utils.ajax.call(this, '/updateRosterMember', this.data, (data, err) => {
@@ -252,21 +240,52 @@ export default {
     backList () {
       this.$router.push('/roster/datalist/:id')
     },
-    successUpload (data) {
-      this.data.pic = data.filename
-      this.data.content += '<img src="' + data.filename + '" />'
-    }
+    
   },
   mounted () {
     utils.storage.get('userInfo', obj => {
-      this.data.opt_user = obj.userInfo.user_name
-			this.data.opt_ip = obj.userInfo.login_ip
+			this.userInfo = obj.userInfo
+//       this.data.opt_user = obj.userInfo.user_name
+// 			this.data.opt_ip = obj.userInfo.login_ip
     })
     utils.ajax.call(this, '/listRoster', {pageSize:100}, (data, err) => {
       if (!err) {
         let arr = data.data
         arr.sort((a, b) => a.id > b.id ? 1 : -1)
         this.sort_data = arr
+				let id = this.$route.params.id
+				if (id) {
+				  utils.ajax.call(this, '/getRosterDetailById', { id }, (obj, err) => {
+				    if (!err) {
+							
+							obj.opt_ip = this.userInfo.login_ip
+							
+				      if (this.userInfo.user_type > 2 && obj.user_id !== this.userInfo.id) {
+				        return this.$router.back()
+				      }
+				      Object.getOwnPropertyNames(this.data).forEach(key => {
+				        this.data[key] = obj[key]
+				      })
+				      // 显示分类
+				      const cid = obj.roster_id
+				      let hasFind = false
+				      let cb = (array, a) => {
+				        !hasFind && array && array.forEach(item => {
+				          a = a || []
+				          let _a = [].concat(a)
+				          _a.push(item.id)
+				          if (item.id === cid) {
+				            hasFind = true
+				            this.sort_id = _a
+				          } else {
+				            cb(item.children, _a)
+				          }
+				        })
+				      }
+				      cb(arr)
+				    }
+				  })
+				}
       }
     })
   },
@@ -275,10 +294,7 @@ export default {
       this.data.sort_id = val.length ? val.slice(-1)[0] : ''
     }
   },
-  mixins: [common.mixin],
-  components: {
-    quillEditor
-  }
+  mixins: [common.mixin]
 }
 </script>
 <style lang="less">

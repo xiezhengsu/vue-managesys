@@ -59,10 +59,11 @@ async function saveExcel (ctx) {
 	const ids = resultlist.map(v=>v.insertId)
 	const opt_logs_data = {
 	  opt_user,
-	  opt_content: `excel导入,生成id集合为:`+JSON.stringify(ids)+`,操作人：`+opt_user+`,关联名册ID:`+roster_id,
+	  opt_content: `excel导入,操作人：`+opt_user+`,关联名册ID:`+roster_id,
 	  opt_time:P.getStrTime(),
 	  opt_ip
 	}
+	console.log(opt_logs_data.opt_content)
 	// 添加日志
 	await connection.execute(`INSERT INTO logs (${Object.keys(opt_logs_data).join(',')}) VALUES (${Object.keys(opt_logs_data).map(() => '?').join(',')})`, Object.values(opt_logs_data))
 	await connection.end()

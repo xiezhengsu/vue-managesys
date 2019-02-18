@@ -37,6 +37,7 @@ const urls = {
   'getArticleById': { userType: 4 },// 获取文章详情
 	'listRoster': {},
 	'listRosterData': {},
+	'getRosterDetailById': {},
 	'updateRoster': {},
 	'updateRosterMember': {},
 	'uploadExcelSrv':{},

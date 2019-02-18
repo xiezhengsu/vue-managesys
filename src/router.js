@@ -107,7 +107,15 @@ export default {
 		      title: '添加会员',
 		      icon: 'fa fa-clone'
 		    },
-		    component: addMember
+		    component: addMember,
+			}, {
+			  path: 'editmember/:id',
+			  meta: {
+			    verify: true,
+			    title: '编辑会员',
+			    icon: 'fa fa-clone'
+			  },
+			  component: addMember
 		  }, {
 		    path: 'datalist/:id',
 		    meta: {

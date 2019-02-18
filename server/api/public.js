@@ -112,7 +112,7 @@ function getLogsQuery(data, arr) {
 function getStrTime(time) {
 	var dateee = new Date().toJSON()
 	if(time){
-		dateee = time.toJSON()
+		dateee = time//.toJSON()
 	}
 	var date = new Date(+new Date(dateee)+8*3600*1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 	return date

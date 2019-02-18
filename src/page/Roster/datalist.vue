@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="grid-table">
-      <el-form :inline="true" :model='search_data'>
+      <el-form :inline="true" :model='search_data' label-position="top">
         <el-form-item label="姓名">
           <el-input v-model="search_data.username"></el-input>
         </el-form-item>
@@ -30,8 +30,8 @@
 				<el-col>
 					<!-- <el-input v-model="''"></el-input> -->
 					<up-file ref="upload" :upload="{}" @successUpload="successUpload" @progress="onProgress"></up-file>
-					<el-button @click="uploadExcel" style="margin-left:10px" :disabled="grade.upFile">{{upText}}</el-button>
-					<el-button @click="exportExcel" style="margin-left:10px">导出文件</el-button>
+					<el-button type="primary" @click="uploadExcel" style="margin-left:10px" :disabled="grade.upFile">{{upText}}</el-button>
+					<el-button type="warning" @click="exportExcel" style="margin-left:10px">导出文件</el-button>
 				</el-col>
 			</el-row>
 			<el-table stripe border style="width:100%;margin-top:10px" :data="table_data.data"
@@ -352,7 +352,7 @@ export default {
         return str === 1 ? '通过' : this.createButton(h, row, key, '审核')
       } else if (key === 'operations') {
         return h('div', [
-          this.createButton(h, row, 'datalist', '编辑'),
+          this.createButton(h, row, 'editmember', '编辑'),
           // this.createButton(h, row, 'delete', '删除')
         ])
       } else if (key === 'read_type') {
@@ -362,8 +362,8 @@ export default {
     },
     // 处理列、按钮点击
     healColumnClick (code, row) {
-      if (code === 'datalist') {
-        this.$router.push('/roster/datalist/' + row.id)
+      if (code === 'editmember') {
+        this.$router.push('/roster/editmember/' + row.id)
       } else if (code === 'view') {
         this.$refs.view.open(!0)
         this.getActiveContent(row.id)
@@ -438,6 +438,7 @@ export default {
   },
   mounted () {
 		utils.storage.get('userInfo', obj => {
+			this.userInfo = obj.userInfo
 		  this.opt_user = obj.userInfo.user_name
 		})
 		utils.ajax.call(this, '/listRoster', {pageSize:100}, (data, err) => {

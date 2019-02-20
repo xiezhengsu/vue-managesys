@@ -23,7 +23,7 @@
         </el-form-item> -->
         <el-form-item>
           <el-button icon="search" type="primary" @click='onSearch'>查询</el-button>
-          <el-button icon="plus" @click="add" :disabled="grade.updateRosterMember">添加会员</el-button>
+          <el-button icon="plus" @click="add" :disabled="grade.updateRosterMember">添加员工信息</el-button>
         </el-form-item>
       </el-form>
 			<el-row>
@@ -36,11 +36,12 @@
           <span style="color: red;font-size: 13px;line-height: 32px;">操作提示：导入Excel文件请严格按照导出文件进行导入，每一列请勿留空，不填部分可用空格代替</span>
         </el-col>
 			</el-row>
-			<el-table stripe border style="width:100%;margin-top:10px" :data="table_data.data"
+			<el-table stripe border style="width:100%;margin-top:10px" :data="table_data.data" height="500"
 			          @selection-change="handleSelectionChange">
 			  <el-table-column v-for='item in table_data.tableConfig' 
 					:label="item.name" :fixed='item.fixed' 
 					:prop='item.key' :width='item.minWidth' 
+          :align="item.align"
 					:key="item.id"
 					:formatter="columnFormatter"
 					>
@@ -50,6 +51,7 @@
 							:label="item1.name" 
 							:prop='item1.key' 
 							:width='item1.minWidth' 
+              :align="item.align"
 							:key="item1.key">
 						</el-table-column>
 					</template>
@@ -126,40 +128,42 @@ export default {
       multipleSelection: [],
       table_data: {
         tableConfig: [
-					{ 'key': 'contract_no', 'name': '合同编号', minWidth: 120,fixed: true },
-					{ 'key': 'username', 'name': '姓名', minWidth: 120 },
-					{ 'key': 'member_sex', 'name': '性别', minWidth: 60 },
-					{ 'key': 'identity_id', 'name': '身份证号', minWidth: 150 },
-					{ 'key': 'telephone', 'name': '联系方式', minWidth: 120 },
+					{ 'key': 'contract_no', 'name': '合同编号',align:'center', minWidth: 120,fixed: true },
+					{ 'key': 'username', 'name': '姓名',align:'center', minWidth: 90,fixed: true },
+					{ 'key': 'member_sex', 'name': '性别',align:'center', minWidth: 60 },
+					{ 'key': 'identity_id', 'name': '身份证号',align:'center', minWidth: 150 },
+					{ 'key': 'telephone', 'name': '联系方式',align:'center', minWidth: 110 },
 					{
-						name: '至德',
-						key: '',
+						name: '至德统计',
+            key: '',
+            align:'center',
 						children: [
-							{ 'key': 'zhide_entry_time', 'name': '入职日期', minWidth: 100 },
-							{ 'key': 'zhide_quit_time', 'name': '离职日期', minWidth: 100 }
+							{ 'key': 'zhide_entry_time', 'name': '入职日期',align:'center', minWidth: 90 },
+							{ 'key': 'zhide_quit_time', 'name': '离职日期',align:'center', minWidth: 90 }
 						]
 					},
 					{
-						name: '长方',
-						key: '',
+						name: '厂方统计',
+            key: '',
+            align:'center',
 						children: [
-							{ 'key': 'factory_entry_time', 'name': '入职日期', minWidth: 100 },
-							{ 'key': 'factory_quit_time', 'name': '离职日期', minWidth: 100 }
+							{ 'key': 'factory_entry_time', 'name': '入职日期',align:'center', minWidth: 90 },
+							{ 'key': 'factory_quit_time', 'name': '离职日期',align:'center', minWidth: 90 }
 						]
 					},
-					{ 'key': 'quit_work_type', 'name': '离职类型', minWidth: 100 },
-					{ 'key': 'salary_standard', 'name': '薪资标准', minWidth: 100 },
-					{ 'key': 'bank_card', 'name': '银行卡号', minWidth: 150 },
+					{ 'key': 'quit_work_type', 'name': '离职类型',align:'center', minWidth: 100 },
+					{ 'key': 'salary_standard', 'name': '薪资标准',align:'center', minWidth: 100 },
+					{ 'key': 'bank_card', 'name': '银行卡号',align:'center', minWidth: 160 },
 					{ 'key': 'bank_name', 'name': '开户行', minWidth: 100 },
 					{ 'key': 'bank_addr', 'name': '开户地', minWidth: 100 },
-					{ 'key': 'member_source', 'name': '来源', minWidth: 100 },
-					{ 'key': 'reference_fee', 'name': '参考返费', minWidth: 100 },
-					{ 'key': 'medical_invoice', 'name': '体检发票', minWidth: 100 },
-					{ 'key': 'data_in', 'name': '资料入库', minWidth: 100 },
+					{ 'key': 'member_source', 'name': '来源',align:'center', minWidth: 100 },
+					{ 'key': 'reference_fee', 'name': '参考返费',align:'center', minWidth: 100 },
+					{ 'key': 'medical_invoice', 'name': '体检发票',align:'center', minWidth: 100 },
+					{ 'key': 'data_in', 'name': '资料入库',align:'center', minWidth: 100 },
 					{ 'key': 'content_1', 'name': '其他1', minWidth: 100 },
 					{ 'key': 'content_2', 'name': '其他2', minWidth: 100 },
-					{ 'key': 'create_time', 'name': '创建时间', minWidth: 150 },
-					{ 'key': 'operations', 'name': '操作', minWidth: 100,fixed: 'right' }
+					{ 'key': 'create_time', 'name': '创建时间',align:'center', minWidth: 150 },
+					{ 'key': 'operations', 'name': '操作', minWidth: 100,align:'center',fixed: 'right' }
         ],
         total: 0,
         data: []

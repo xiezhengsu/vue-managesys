@@ -105,7 +105,7 @@ export default {
 		    meta: {
 					verify: true,
 					grade: common.page_grade.updateRosterMember,
-		      title: '添加会员',
+		      title: '添加员工信息',
 		      icon: 'fa fa-clone'
 		    },
 		    component: addMember,

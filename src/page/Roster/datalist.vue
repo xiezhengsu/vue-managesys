@@ -13,26 +13,28 @@
 					  </el-option>
 					</el-select>
         </el-form-item>
-        <el-form-item label="权限">
+        <!-- <el-form-item label="权限">
           <el-select v-model="search_data.read_type">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="(value,key) in read_type" :key="key"
                        :label="value" :value="key" v-if="key!=='0'">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button icon="search" type="primary" @click='onSearch'>查询</el-button>
-          <el-button icon="plus" @click="add" :disabled="grade.updateArticle">添加会员</el-button>
+          <el-button icon="plus" @click="add" :disabled="grade.updateRosterMember">添加会员</el-button>
         </el-form-item>
       </el-form>
 			<el-row>
-				<el-col>
-					<!-- <el-input v-model="''"></el-input> -->
+				<el-col span="4">
 					<up-file ref="upload" :upload="{}" :roster_id="search_data.roster_id" @successUpload="successUpload" @progress="onProgress"></up-file>
 					<el-button type="primary" @click="uploadExcel" style="margin-left:10px" :disabled="grade.upFile">{{upText}}</el-button>
 					<el-button type="warning" @click="exportExcel" style="margin-left:10px">导出文件</el-button>
 				</el-col>
+        <el-col span="12">
+          <span style="color: red;font-size: 13px;line-height: 32px;">操作提示：导入Excel文件请严格按照导出文件进行导入，每一列请勿留空，不填部分可用空格代替</span>
+        </el-col>
 			</el-row>
 			<el-table stripe border style="width:100%;margin-top:10px" :data="table_data.data"
 			          @selection-change="handleSelectionChange">
@@ -62,7 +64,8 @@
         :total="table_data.total">
       </el-pagination>
     </el-row>
-    <Sidebar ref="view">
+    <!-- 查看弹窗 -->
+    <!-- <Sidebar ref="view">
       <div slot='title'>{{article.title}}</div>
       <div slot="content" class="sidebar_content" v-loading="loading">
         <el-row :gutter="20" class="">
@@ -84,7 +87,7 @@
           <a @click="getActiveContent(article.prev.id)" href="javascript:void 0">{{article.prev.title}}</a>
         </p>
       </div>
-    </Sidebar>
+    </Sidebar> -->
   </div>
 </template>
 <script type="text/javascript">
@@ -113,9 +116,9 @@ export default {
         value: 'id'
       },
       search_data: {
-        title: '',
+        username: '',
         sort_id: '',
-        read_type: '',
+        // read_type: '',
         page: 1,
         pageSize: 10
       },
@@ -162,17 +165,18 @@ export default {
         data: []
       },
       loading: false,
-      article: {
-        title: '',
-        sort_name: '',
-        user_name: '',
-        read_type: '',
-        create_time: '',
-        description: '',
-        content: '',
-        prev: { id: 0, title: '' },
-        next: { id: 0, title: '' }
-      },
+      // 查看弹窗对象
+      // article: {
+      //   title: '',
+      //   sort_name: '',
+      //   user_name: '',
+      //   read_type: '',
+      //   create_time: '',
+      //   description: '',
+      //   content: '',
+      //   prev: { id: 0, title: '' },
+      //   next: { id: 0, title: '' }
+      // },
 			fileList: [],
 			opt_user:'',
 			exportData:[]
@@ -307,7 +311,7 @@ export default {
       return user.user_type < 3 || result
     },
     add () {
-      this.$router.push('/article/add')
+      this.$router.push('/roster/add')
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -365,46 +369,46 @@ export default {
     healColumnClick (code, row) {
       if (code === 'editmember') {
         this.$router.push('/roster/editmember/' + row.id)
-      } else if (code === 'view') {
-        this.$refs.view.open(!0)
-        this.getActiveContent(row.id)
-      } else if (code === 'passed') {
-        this.passedArticle([row], row.passed === 1 ? 0 : 1)
-      } else if (code === 'delete') {
-        this.deleteArticle([row])
+      // } else if (code === 'view') {
+      //   this.$refs.view.open(!0)
+      //   this.getActiveContent(row.id)
+      // } else if (code === 'passed') {
+      //   this.passedArticle([row], row.passed === 1 ? 0 : 1)
+      // } else if (code === 'delete') {
+      //   this.deleteArticle([row])
       }
     },
-    getActiveContent (id) {
-      this.loading = !0
-      utils.ajax.call(this, '/getArticleById', Object.assign({ id }, this.search_data), (obj, err) => {
-        this.loading = !1
-        if (err) {
-          this.$refs.view.open(!1)
-        } else {
-          Object.getOwnPropertyNames(this.article).forEach(key => {
-            this.$set(this.article, key, obj[key])
-          })
-          this.article.create_time = new Date(this.article.create_time).toLocaleDateString()
-          // 显示分类
-          const cid = obj.sort_id
-          let hasFind = false
-          let cb = (array, a) => {
-            !hasFind && array && array.forEach(item => {
-              a = a || []
-              let _a = [].concat(a)
-              _a.push(item.id)
-              if (item.id === cid) {
-                hasFind = true
-                this.sort_id = _a
-              } else {
-                cb(item.children, _a)
-              }
-            })
-          }
-          cb(this.sort_data)
-        }
-      })
-    },
+    // getActiveContent (id) {
+    //   this.loading = !0
+    //   utils.ajax.call(this, '/getArticleById', Object.assign({ id }, this.search_data), (obj, err) => {
+    //     this.loading = !1
+    //     if (err) {
+    //       this.$refs.view.open(!1)
+    //     } else {
+    //       Object.getOwnPropertyNames(this.article).forEach(key => {
+    //         this.$set(this.article, key, obj[key])
+    //       })
+    //       this.article.create_time = new Date(this.article.create_time).toLocaleDateString()
+    //       // 显示分类
+    //       const cid = obj.sort_id
+    //       let hasFind = false
+    //       let cb = (array, a) => {
+    //         !hasFind && array && array.forEach(item => {
+    //           a = a || []
+    //           let _a = [].concat(a)
+    //           _a.push(item.id)
+    //           if (item.id === cid) {
+    //             hasFind = true
+    //             this.sort_id = _a
+    //           } else {
+    //             cb(item.children, _a)
+    //           }
+    //         })
+    //       }
+    //       cb(this.sort_data)
+    //     }
+    //   })
+    // },
     // ajax请求列表数据
     ajaxData () {
       // let p = this.sort_id
@@ -446,7 +450,7 @@ export default {
 		  if (!err) {
 		    let arr = data.data
 		    arr.sort((a, b) => a.id > b.id ? 1 : -1)
-		    this.sort_data = arr
+        this.sort_data = arr
 		  }
 		})
     this.ajaxData()

@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
       })
       NProgress.done()
     } else if (to.path === '/login' && obj.token) {
-      next({ path: '/article/list' })// 已经登录不准进入登录界面
+      next({ path: '/roster/list' })// 已经登录不准进入登录界面
     } else {
       next()
     }

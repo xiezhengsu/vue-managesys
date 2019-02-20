@@ -14,7 +14,7 @@ export default {
   upFile_maxSize: 1024 * 1024 * 50, // 上传文件大小限制50m
   upFile_accept: /^application\//, // 上传文件格式限制
   user_type: {
-    0: '未审核用户',
+    // 0: '未审核用户',
     1: '超级管理员',
     2: '高级管理员',
     3: '普通管理员',
@@ -37,7 +37,9 @@ export default {
     listArticle: 4, // 文章列表（必须登录）
     updateArticle: 4, // 新添或编辑文章（必须登录）
     passedArticle: 2, // 审核文章（管理员级别）
-    deleteArticle: 2 // 删除文章（管理员级别或会员删除自己的）
+    deleteArticle: 2, // 删除文章（管理员级别或会员删除自己的）
+    updateRosterMember: 1,  //添加会员
+    updateRoster: 1, // 添加名册
   },
   sort_type: {
     'news': '新闻',

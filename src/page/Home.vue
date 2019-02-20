@@ -232,7 +232,7 @@ export default {
   computed: {
     getMenu () {
       let menu = this.$router.options.routes
-      const paths = ['/', '*', '/login', 'edit/:id']
+      const paths = ['/', '*', '/login', 'edit/:id', 'editmember/:id', 'datalist/:id']
       menu.forEach(obj => {
         obj.meta = obj.meta || {}
         obj.meta.show = !paths.includes(obj.path)

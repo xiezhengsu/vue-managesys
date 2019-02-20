@@ -34,6 +34,7 @@ export default {
       let file = files[0]
       formData.append('file', file)
 			formData.append("roster_id",this.roster_id)
+			console.log(file)
       if (!common.upFile_accept.test(file.type)) {
         this.$message('非法上传文件格式！')
       } else if (file.size > common.upFile_maxSize) {

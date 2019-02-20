@@ -87,7 +87,7 @@ export default {
 		    meta: {
 		      verify: true,
 		      grade: common.page_grade.updateRoster,
-		      title: '新增名册',
+		      title: '添加名册',
 		      icon: 'fa fa-th-large'
 		    },
 		    component: addRoster
@@ -103,7 +103,8 @@ export default {
 		  }, {
 		    path: 'add',
 		    meta: {
-		      verify: true,
+					verify: true,
+					grade: common.page_grade.updateRosterMember,
 		      title: '添加会员',
 		      icon: 'fa fa-clone'
 		    },
@@ -111,7 +112,8 @@ export default {
 			}, {
 			  path: 'editmember/:id',
 			  meta: {
-			    verify: true,
+					verify: true,
+					grade: common.page_grade.updateRosterMember,
 			    title: '编辑会员',
 			    icon: 'fa fa-clone'
 			  },
